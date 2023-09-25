@@ -43,12 +43,12 @@ app.use((req, res, next) => {
     if (currencyCode) {
         const currency = currencyData[currencyCode];
         if (currency && currency.mid !== null) {
-            res.json({ kurs: currency.mid });
+            res.send(currency.mid.toString());
         } else {
-            res.status(500).json({ error: 'Nie można pobrać kursu waluty' });
+            res.status(500).send('Nie można pobrać kursu waluty');
         }
     } else {
-        res.status(404).json({ error: 'Nie znaleziono takiego adresu URL' });
+        res.status(404).send('Nie znaleziono takiego adresu URL');
     }
 });
 
