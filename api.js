@@ -28,30 +28,34 @@ fetchExchangeRates();
 
 setInterval(fetchExchangeRates, 5 * 60 * 1000);
 
-app.use((req, res, next) => {
-    const { url } = req;
-    let currencyCode = '';
-
-    if (url === '/dolar') {
-        currencyCode = 'USD';
-    } else if (url === '/euro') {
-        currencyCode = 'EUR';
-    } else if (url === '/funt') {
-        currencyCode = 'GBP';
-    }
-
-    if (currencyCode) {
-        const currency = currencyData[currencyCode];
-        if (currency && currency.mid !== null) {
-            res.send(currency.mid.toString());
-        } else {
-            res.status(500).send('Nie można pobrać kursu waluty');
-        }
+app.get('/dolar', (req, res) => {
+    const currency = currencyData.USD;
+    if (currency && currency.mid !== null) {
+        res.json(currency.mid);
     } else {
-        res.status(404).send('Nie znaleziono takiego adresu URL');
+        res.status(500).send('Nie można pobrać kursu dolara');
+    }
+});
+
+app.get('/funt', (req, res) => {
+    const currency = currencyData.EUR;
+    if (currency && currency.mid !== null) {
+        res.json(currency.mid);
+    } else {
+        res.status(500).send('Nie można pobrać kursu euro');
+    }
+});
+
+app.get('/euro', (req, res) => {
+    const currency = currencyData.GBP;
+    if (currency && currency.mid !== null) {
+        res.json(currency.mid);
+    } else {
+        res.status(500).send('Nie można pobrać kursu funta szterlinga');
     }
 });
 
 app.listen(port, () => {
     console.log(`Serwer Express działa na porcie ${port}`);
 });
+
